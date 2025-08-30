@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="fw-bold text-center mb-4">📊Agentless Windows Vulnerability & Network Scanner</h2>
+    <p class="text-center text-white">Agentless Windows & Network Security Toolkit. Select a tool below to get started.</p>
+
+
+    <div class="row g-4 mt-4">
+        <!-- Network Scanner -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100 hover-card">
+                <div class="card-body text-center">
+                    <i class="bi bi-hdd-network fs-1 text-primary"></i>
+                    <h5 class="card-title mt-3">Network Scanner</h5>
+                    <p class="card-text text-muted">Discover connected devices, open ports, and network details.</p>
+                    <a href="{{ url_for('network_scanner') }}" class="btn btn-primary w-100">Launch</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Local Vulnerability Scanner -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100 hover-card">
+                <div class="card-body text-center">
+                    <i class="bi bi-shield-lock fs-1 text-success"></i>
+                    <h5 class="card-title mt-3">Local Vulnerability Scanner</h5>
+                    <p class="card-text text-muted">Scan your system for vulnerabilities, outdated software, and threats.</p>
+                    <a href="{{ url_for('local_scan') }}" class="btn btn-success w-100">Launch</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Audit -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100 hover-card">
+                <div class="card-body text-center">
+                    <i class="bi bi-clipboard-data fs-1 text-warning"></i>
+                    <h5 class="card-title mt-3">Security Audit</h5>
+                    <p class="card-text text-muted">Perform a deep audit of a target and generate professional reports.</p>
+                    <a href="{{ url_for('security_audit') }}" class="btn btn-warning w-100">Launch</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subdomain Finder -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100 hover-card">
+                <div class="card-body text-center">
+                    <i class="bi bi-diagram-3 fs-1 text-info"></i>
+                    <h5 class="card-title mt-3">Subdomain Finder</h5>
+                    <p class="card-text text-muted">Enumerate subdomains of a target to identify possible attack vectors.</p>
+                    <a href="{{ url_for('subdomain_finder') }}" class="btn btn-info w-100">Launch</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Subdomain Finder -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100 hover-card">
+                <div class="card-body text-center">
+                    <i class="bi bi-broadcast-pin fs-1 text-danger"></i>
+                    <h5 class="card-title mt-3">Live Subdomain Finder</h5>
+                    <p class="card-text text-muted">Find only active/live subdomains to reduce noise in enumeration.</p>
+                    <a href="{{ url_for('live_subdomain_finder') }}" class="btn btn-danger w-100">Launch</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Extra Styling -->
+<style>
+    .hover-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 15px;
+    }
+    .hover-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+</style>
+{% endblock %}

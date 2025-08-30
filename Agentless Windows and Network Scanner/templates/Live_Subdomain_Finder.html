@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% block title %}Live Subdomain Finder{% endblock %}
+
+{% block content %}
+<h3 class="text-white">🔎 Live Subdomain Finder</h3>
+<p class="text-white mb-3">
+    Choose input method to check live/dead status of domains/subdomains.
+    Download reports in CSV, XLSX, TXT, or PDF.
+</p>
+
+<form method="POST" enctype="multipart/form-data" id="scanForm" class="mb-4">
+
+  <!-- Initial choice -->
+  <div class="mb-3" id="choiceDiv">
+    <button type="button" class="btn btn-primary me-2" id="chooseTextBtn">Single Domain/Subdomain</button>
+    <button type="button" class="btn btn-primary" id="chooseFileBtn">Upload File</button>
+  </div>
+
+  <!-- Text input -->
+  <div class="mb-2 d-none" id="textInputDiv">
+    <input type="text" name="domain" class="form-control" placeholder="Enter single domain (example.com)">
+  </div>
+
+  <!-- File input -->
+  <div class="mb-2 d-none" id="fileInputDiv">
+    <input type="file" name="domain_file" class="form-control" accept=".txt,.csv,.xls,.xlsx,.pdf" id="domainFile">
+  </div>
+
+  <button type="submit" class="btn btn-success">🚀 Start Scan</button>
+  <button type="button" class="btn btn-secondary" id="newScanBtn">🔄 New Scan</button>
+</form>
+
+<div id="progressContainer" class="mb-3"></div>
+
+{% if live or dead %}
+<!-- Live Domains Table -->
+<h4 class="text-white">Live Domains/Subdomains ({{ live|length }})</h4>
+<div class="mb-2">
+    <button class="btn btn-sm btn-secondary" onclick="copyTable('liveTable')">📋 Copy Live</button>
+</div>
+<table class="table table-dark table-bordered table-hover" id="liveTable">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Domain/Subdomain</th>
+      <th>IP</th>
+      <th>URL</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in live %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ item.domain }}</td>
+      <td>{{ item.ip }}</td>
+      <td>{% if item.url %}<a href="{{ item.url }}" target="_blank">{{ item.url }}</a>{% else %}N/A{% endif %}</td>
+      <td>{{ item.status_code }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<!-- Dead Domains Table -->
+<h4 class="text-white mt-4">Dead Domains/Subdomains ({{ dead|length }})</h4>
+<div class="mb-2">
+    <button class="btn btn-sm btn-secondary" onclick="copyTable('deadTable')">📋 Copy Dead</button>
+</div>
+<table class="table table-dark table-bordered table-hover" id="deadTable">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Domain/Subdomain</th>
+      <th>IP</th>
+      <th>URL</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in dead %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ item.domain }}</td>
+      <td>{{ item.ip }}</td>
+      <td>{% if item.url %}<a href="{{ item.url }}" target="_blank">{{ item.url }}</a>{% else %}N/A{% endif %}</td>
+      <td>{{ item.status_code }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+
+<div class="mt-3">
+    <form method="GET" action="{{ url_for('download_pdf_report') }}">
+    <button type="submit" class="btn btn-success">📄 Download PDF Report</button>
+</form>
+
+</div>
+{% endif %}
+
+
+
+<style>
+#progressContainer p {
+    animation: blink 1.2s infinite;
+    color: #fff;
+}
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const choiceDiv = document.getElementById("choiceDiv");
+    const textDiv = document.getElementById("textInputDiv");
+    const fileDiv = document.getElementById("fileInputDiv");
+    const chooseTextBtn = document.getElementById("chooseTextBtn");
+    const chooseFileBtn = document.getElementById("chooseFileBtn");
+    const form = document.getElementById("scanForm");
+    const progressContainer = document.getElementById("progressContainer");
+    const newScanBtn = document.getElementById("newScanBtn");
+    const fileInput = document.getElementById("domainFile");
+    const textInput = form.querySelector("input[name='domain']");
+    const downloadBtn = document.getElementById("downloadReportBtn");
+
+    chooseTextBtn.addEventListener("click", function() {
+        textDiv.classList.remove("d-none");
+        fileDiv.classList.add("d-none");
+        choiceDiv.classList.add("d-none");
+    });
+
+    chooseFileBtn.addEventListener("click", function() {
+        fileDiv.classList.remove("d-none");
+        textDiv.classList.add("d-none");
+        choiceDiv.classList.add("d-none");
+    });
+
+    form.addEventListener("submit", function(event) {
+        if(!textInput.value.trim() && !fileInput.files.length){
+            alert("❌ Please enter a domain or select a file before starting the scan!");
+            event.preventDefault();
+            return false;
+        }
+        if(fileInput.files.length){
+            const allowedExtensions = /(\.txt|\.csv|\.xls|\.xlsx|\.pdf)$/i;
+            const fileName = fileInput.files[0].name;
+            if(!allowedExtensions.exec(fileName)){
+                alert("❌ Invalid file type! Allowed: .txt, .csv, .xls, .xlsx, .pdf");
+                event.preventDefault();
+                return false;
+            }
+        }
+        progressContainer.innerHTML = '<p>🔍 Mapping Domains & Subdomains… ⏳ Stay Sharp, Stay Patient!</p>';
+    });
+
+    newScanBtn.addEventListener("click", function() {
+        window.location.reload();
+    });
+
+    // Download report
+    // if(downloadBtn){
+    //     downloadBtn.addEventListener("click", function() {
+    //         // Create a hidden form for download
+    //         const downloadForm = document.createElement("form");
+    //         downloadForm.method = "POST";
+    //         downloadForm.action = "/download_livesubdomains";
+    //         downloadForm.style.display = "none";
+    //         downloadForm.enctype = "multipart/form-data";
+
+    //         if(textInput.value.trim()){
+    //             const domainInput = document.createElement("input");
+    //             domainInput.type = "hidden";
+    //             domainInput.name = "domain";
+    //             domainInput.value = textInput.value.trim();
+    //             downloadForm.appendChild(domainInput);
+    //         }
+
+    //         if(fileInput.files.length){
+    //             const fileClone = fileInput.cloneNode();
+    //             fileClone.files = fileInput.files;
+    //             fileClone.name = "domain_file";
+    //             downloadForm.appendChild(fileClone);
+    //         }
+
+    //         document.body.appendChild(downloadForm);
+    //         downloadForm.submit();
+    //         document.body.removeChild(downloadForm);
+    //     });
+    // }
+});
+
+// Copy table function
+function copyTable(tableId) {
+    const table = document.getElementById(tableId);
+    if(!table) return;
+    const range = document.createRange();
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    range.selectNodeContents(table);
+    selection.addRange(range);
+    document.execCommand('copy');
+    selection.removeAllRanges();
+    alert("✅ Table copied to clipboard!");
+}
+</script>
+{% endblock %}

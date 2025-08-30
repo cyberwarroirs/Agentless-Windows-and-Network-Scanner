@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Agentless Scanner{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+  <style>
+    /* Global Dark Theme */
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 1rem 2rem;
+      border-bottom: 2px solid #0d6efd;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      transition: all 0.3s ease-in-out;
+    }
+
+    header h2 {
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0px 0px 8px rgba(0, 140, 255, 0.7);
+    }
+
+    /* Navigation */
+    nav .nav-link {
+      color: #e6edf3 !important;
+      margin: 0 0.6rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+
+    nav .nav-link:hover {
+      background: rgba(13, 110, 253, 0.2);
+      color: #ffdd57 !important;
+      transform: translateY(-2px);
+      box-shadow: 0px 2px 8px rgba(13,110,253,0.4);
+    }
+
+    /* Main */
+    main.container {
+      margin-top: 3rem;
+      padding: 2rem;
+      background: rgba(22, 27, 34, 0.9);
+      border-radius: 16px;
+      box-shadow: 0px 8px 25px rgba(0,0,0,0.45);
+      min-height: 70vh;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: all 0.3s ease;
+    }
+
+    main.container:hover {
+      box-shadow: 0px 10px 35px rgba(0,0,0,0.6);
+    }
+
+    /* Buttons */
+    .btn-custom {
+      background: linear-gradient(90deg, #6a11cb, #2575fc);
+      border: none;
+      color: #fff;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+    }
+
+    .btn-custom:hover {
+      background: linear-gradient(90deg, #2575fc, #6a11cb);
+      transform: scale(1.08);
+      box-shadow: 0px 6px 16px rgba(37,117,252,0.5);
+    }
+
+    /* Footer */
+    footer {
+      background: #161b22;
+      color: #aaa;
+      padding: 1.5rem;
+      border-top: 2px solid #0d6efd;
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+    }
+
+    footer p {
+      margin: 0.3rem 0;
+    }
+
+    footer i {
+      color: #0d6efd;
+      margin-right: 6px;
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #2575fc;
+      border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0d1117;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="d-flex justify-content-between align-items-center">
+    <h2>Cyberwarriors</h2>
+    <nav>
+      <a class="nav-link d-inline" href="{{ url_for('dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a>
+      <a class="nav-link d-inline" href="{{ url_for('network_scanner') }}"><i class="bi bi-wifi"></i> Network Scanner</a>
+      <a class="nav-link d-inline" href="{{ url_for('local_scan') }}"><i class="bi bi-laptop"></i> Local Scanner</a>
+      <a class="nav-link d-inline" href="{{ url_for('security_audit') }}"><i class="bi bi-shield-lock"></i> Security Audit</a>
+      <a class="nav-link d-inline" href="{{ url_for('subdomain_finder') }}"><i class="bi bi-globe"></i> Subdomain Finder</a>
+      <a class="nav-link d-inline" href="{{ url_for('live_subdomain_finder') }}"><i class="bi bi-broadcast"></i> Live Subdomains</a>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p><i class="bi bi-c-circle"></i> 2025 Agentless Windows & Network Scanner. All rights reserved.</p>
+    <p>Developed with ❤️ by <strong>Cyberwarriors Team</strong></p>
+    <p><i class="bi bi-code-slash"></i> Version 1.0 | <i class="bi bi-envelope"></i> Contact: <a href="mailto:vijaywagh7391@gmail.com" class="text-decoration-none text-info">vijaywagh7391@gmail.com</a></p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

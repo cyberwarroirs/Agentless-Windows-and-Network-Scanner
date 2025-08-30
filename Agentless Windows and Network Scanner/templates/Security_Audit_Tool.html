@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block title %}Website Security Audit{% endblock %}
+
+{% block content %}
+<h3 class="text-white">🛡 Website Security Audit</h3>
+<p class="mb-3 text-white">
+    Scan a domain or full URL for common issues (headers, TLS, SQLi, XSS/HTML injection, debug/hidden params). 
+    Use only on targets you own or have permission to test.
+</p>
+
+<form method="POST" id="auditForm">
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" name="target" placeholder="https://example.com/products?id=1" required>
+    <button type="submit" class="btn btn-custom">Run Audit</button>
+  </div>
+</form>
+
+<!-- Dynamic progress message -->
+<div id="progressContainer"></div>
+
+{% if results %}
+<hr class="border-light">
+<h4 class="mt-3 text-white">Results for <code class="text-white">{{ results.Target }}</code></h4>
+
+<!-- Executive Summary -->
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card bg-dark border-secondary h-100 text-white">
+      <div class="card-header border-secondary text-white">Summary</div>
+      <div class="card-body">
+        <table class="table table-dark table-bordered table-sm mb-0 text-white">
+          <tbody>
+          {% for k, v in results.Summary.items() %}
+            <tr><th style="width: 40%" class="text-white">{{ k }}</th><td class="text-white">{{ v }}</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card bg-dark border-secondary h-100 text-white">
+      <div class="card-header border-secondary text-white">Test Matrix</div>
+      <div class="card-body">
+        <div><b>Params Tested:</b> {{ results["Test Matrix"]["Params Tested"]|join(", ") }}</div>
+        <div><b>SQLi Payloads:</b> {{ results["Test Matrix"]["SQLi Payloads Tried"]|join(" , ") }}</div>
+        <div><b>XSS/HTML Payloads:</b> {{ results["Test Matrix"]["XSS/HTML Payloads Tried"]|join(" , ") }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Config Tables -->
+<div class="row g-3 mt-1">
+  <div class="col-md-6">
+    <div class="card bg-dark border-secondary h-100 text-white">
+      <div class="card-header border-secondary text-white">HTTP Security Headers</div>
+      <div class="card-body">
+        <table class="table table-dark table-bordered table-hover table-sm text-white">
+          <thead><tr><th class="text-white">Header</th><th class="text-white">Status</th></tr></thead>
+          <tbody>
+          {% for k, v in results["HTTP Headers"].items() %}
+            <tr><td class="text-white">{{ k }}</td><td class="text-white">{{ v }}</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card bg-dark border-secondary h-100 text-white">
+      <div class="card-header border-secondary text-white">TLS / SSL Certificate</div>
+      <div class="card-body">
+        <table class="table table-dark table-bordered table-hover table-sm text-white">
+          <thead><tr><th class="text-white">Key</th><th class="text-white">Value</th></tr></thead>
+          <tbody>
+          {% for k, v in results["SSL Certificate"].items() %}
+            <tr><td class="text-white">{{ k }}</td><td class="text-white">{{ v }}</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Findings -->
+<div class="mt-4">
+  <h5 class="text-white">Detailed Findings</h5>
+  {% if results.Findings|length == 0 %}
+    <div class="alert alert-info">No issues detected by current checks.</div>
+  {% else %}
+    <div class="accordion" id="findingsAcc">
+      {% for f in results.Findings %}
+      <div class="accordion-item bg-dark text-white border-secondary">
+        <h2 class="accordion-header" id="head{{ loop.index }}">
+          <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#col{{ loop.index }}" aria-expanded="false">
+            {{ loop.index }}. {{ f.title }} <span class="badge bg-secondary ms-2">{{ f.severity }}</span>
+          </button>
+        </h2>
+        <div id="col{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#findingsAcc">
+          <div class="accordion-body text-white">
+            <table class="table table-dark table-bordered table-sm text-white">
+              <tbody>
+                <tr><th style="width: 25%" class="text-white">Category</th><td class="text-white">{{ f.category }}</td></tr>
+                <tr><th class="text-white">Affected URL</th><td class="text-white"><code>{{ f.affected_url }}</code></td></tr>
+                {% if f.parameter %}<tr><th class="text-white">Parameter</th><td class="text-white">{{ f.parameter }}</td></tr>{% endif %}
+                {% if f.payload %}<tr><th class="text-white">Payload</th><td class="text-white"><code>{{ f.payload }}</code></td></tr>{% endif %}
+                <tr><th class="text-white">Description</th><td class="text-white">{{ f.description }}</td></tr>
+                <tr><th class="text-white">Evidence</th><td class="text-white"><pre class="mb-0" style="white-space: pre-wrap">{{ f.evidence }}</pre></td></tr>
+                <tr><th class="text-white">Impact</th><td class="text-white">{{ f.impact }}</td></tr>
+                <tr><th class="text-white">Likelihood</th><td class="text-white">{{ f.likelihood }}</td></tr>
+                <tr><th class="text-white">Recommendation</th><td class="text-white">{{ f.recommendation }}</td></tr>
+                {% if f.references and f.references|length > 0 %}
+                  <tr><th class="text-white">References</th><td class="text-white">
+                    {% for r in f.references %}
+                      <div class="text-white">{{ r }}</div>
+                    {% endfor %}
+                  </td></tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+<!-- Download Button -->
+<form method="POST" action="{{ url_for('download_audit_report') }}" class="mt-3">
+  <input type="hidden" name="target" value="{{ results.Target }}">
+  <button type="submit" class="btn btn-success"><i class="bi bi-download"></i> Download Detailed PDF</button>
+</form>
+ {% endif %}
+<!-- JavaScript to show progress message -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("auditForm");
+    const progressContainer = document.getElementById("progressContainer");
+
+    form.addEventListener("submit", function() {
+        // Clear previous message
+        progressContainer.innerHTML = "";
+        // Create and show new progress message
+        const msg = document.createElement("p");
+        msg.className = "mb-3 text-white";
+        msg.innerHTML = "🛡️ Testing in Progress… ⏳ Patience is Part of the Hack! 💻";
+        progressContainer.appendChild(msg);
+    });
+});
+</script>
+ 
+{% endblock %}

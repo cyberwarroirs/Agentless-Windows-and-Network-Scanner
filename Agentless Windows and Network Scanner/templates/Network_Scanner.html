@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+{% block title %}Network Scanner{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-4 text-primary">🌐 Network Scanner</h3>
+
+    <!-- JS Popup Error -->
+    {% if error %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                icon: "error",
+                title: "Scan Error",
+                text: "{{ error }}",
+                confirmButtonColor: "#d33",
+                confirmButtonText: "OK"
+            });
+        });
+    </script>
+    {% endif %}
+
+    <!-- Scan Form -->
+    <div class="card mb-4 shadow-sm border-0 rounded-3">
+        <div class="card-body">
+            <form method="POST">
+                <div class="mb-3">
+                    <input type="text" name="target" class="form-control form-control-lg"
+                           placeholder="🔍 Enter target IP or Range" value="{{ target or '' }}" required>
+                </div>
+
+                <label class="form-label fw-bold">Select Scan Types:</label>
+                <div class="row">
+                    {% set options = [
+                        ('basic','🔹 Basic Ping Scan'),
+                        ('service','⚙️ Service & Version Detection'),
+                        ('os','💻 OS Detection'),
+                        ('aggressive','⚡ Aggressive Scan'),
+                        ('full','🔍 Full Port Scan'),
+                        ('vuln','🛡️ Vulnerability Scan'),
+                        ('dns','🌐 DNS Scan'),
+                        ('udp','📡 UDP Scan')
+                    ] %}
+                    {% for value,label in options %}
+                        <div class="col-md-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="scan_types"
+                                       value="{{ value }}" id="{{ value }}Scan"
+                                       {% if scan_types and value in scan_types %}checked{% endif %}>
+                                <label class="form-check-label" for="{{ value }}Scan">{{ label }}</label>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Buttons -->
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary w-100 shadow-sm">
+                            🚀 Run Scan
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{{ url_for('network_scanner') }}" class="btn btn-secondary w-100 shadow-sm">
+                            🔄 New Scan
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scan Results -->
+    {% if results %}
+        <h4 class="text-success mb-3">📊 Scan Results</h4>
+
+        {% for host, info in results.items() %}
+        <div class="accordion mb-3" id="hostAccordion{{ loop.index }}">
+            <div class="accordion-item shadow-sm border-0 rounded-3">
+                <h2 class="accordion-header" id="heading{{ loop.index }}">
+                    <button class="accordion-button collapsed fw-bold" type="button" 
+                            data-bs-toggle="collapse" 
+                            data-bs-target="#collapse{{ loop.index }}" 
+                            aria-expanded="false" aria-controls="collapse{{ loop.index }}">
+                        <i class="bi bi-pc-display"></i> {{ host }}
+                        {% if info.state %}
+                        <span class="badge ms-2 {{ 'bg-success' if info.state == 'up' else 'bg-danger' }}">
+                            {{ info.state|upper }}
+                        </span>
+                        {% endif %}
+                    </button>
+                </h2>
+                <div id="collapse{{ loop.index }}" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+
+                        {% if scan_types %}
+                            <p><b>Scan Types:</b> {{ scan_types|join(", ") }}</p>
+                        {% endif %}
+
+                        {% if info.hostnames %}
+                            <p><b>🔖 Hostnames:</b> 
+                                {% for h in info.hostnames %}
+                                    <span class="badge bg-info text-dark">{{ h.name }}</span>
+                                {% endfor %}
+                            </p>
+                        {% endif %}
+
+                        {% if info.osmatch %}
+                            <p><b>💻 OS Detection:</b></p>
+                            <ul>
+                                {% for os in info.osmatch %}
+                                    <li>{{ os.name }} (Accuracy: {{ os.accuracy }}%)</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        {% if info.ports %}
+                            <h6 class="mt-3">🔌 Open Ports & Services</h6>
+                            <div class="table-responsive" style="max-height: 300px; overflow-y:auto;">
+                                <table class="table table-sm table-hover align-middle border">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Port</th>
+                                            <th>Protocol</th>
+                                            <th>State</th>
+                                            <th>Service</th>
+                                            <th>Product</th>
+                                            <th>Version</th>
+                                            <th>Extra Info</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for p in info.ports %}
+                                        <tr>
+                                            <td><span class="badge bg-dark">{{ p.port }}</span></td>
+                                            <td>{{ p.protocol }}</td>
+                                            <td><span class="badge {{ 'bg-success' if p.state == 'open' else 'bg-danger' }}">{{ p.state }}</span></td>
+                                            <td>{{ p.service or '-' }}</td>
+                                            <td>{{ p.product or '-' }}</td>
+                                            <td>{{ p.version or '-' }}</td>
+                                            <td>{{ p.extrainfo or '-' }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">No open ports found.</div>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Collapsible Graphs -->
+        {% if graphs %}
+        <div class="accordion mb-3" id="graphAccordion">
+            <div class="accordion-item shadow-sm border-0 rounded-3">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed fw-bold" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#graphsCollapse"
+                            aria-expanded="false" aria-controls="graphsCollapse">
+                        📊 View Graphs
+                    </button>
+                </h2>
+                <div id="graphsCollapse" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        <div class="row">
+                            {% if graphs.ports %}
+                            <div class="col-md-6 mb-3">
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-primary text-white">Port Distribution</div>
+                                    <div class="card-body text-center">
+                                        <img src="data:image/png;base64,{{ graphs.ports }}" class="img-fluid rounded"/>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if graphs.services %}
+                            <div class="col-md-6 mb-3">
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-success text-white">Services Detected</div>
+                                    <div class="card-body text-center">
+                                        <img src="data:image/png;base64,{{ graphs.services }}" class="img-fluid rounded"/>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- PDF Report -->
+        <form action="/download_network_report" method="get">
+    <input type="hidden" name="target" value="{{ target }}">
+    {% for scan in scan_types %}
+        <input type="hidden" name="scan_types" value="{{ scan }}">
+    {% endfor %}
+    <button type="submit" class="btn btn-success">Download PDF Report</button>
+</form>
+
+        <!-- Raw Nmap Output -->
+        {% if raw_output %}
+        <div class="card mt-4 shadow-sm border-0 rounded-3">
+            <div class="card-header bg-dark text-white">📜 Raw Nmap Output</div>
+            <div class="card-body">
+                <pre style="white-space: pre-wrap;">{{ raw_output }}</pre>
+            </div>
+        </div>
+        {% endif %}
+
+    {% else %}
+        <div class="alert alert-warning">⚠️ No results yet. Run a scan to see details here.</div>
+    {% endif %}
+</div>
+
+<!-- SweetAlert2 for error popup -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form[method='POST']");
+    if (form) {
+        form.addEventListener("submit", function () {
+            Swal.fire({
+                title: "⏳ Please Wait",
+                text: "Have Patience, Trust the process — good results take time!",
+                icon: "info",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        });
+    }
+});
+</script>
+{% endblock %}
