@@ -199,9 +199,20 @@ Agentless Windows and Network Scanner
 
 * **Website Security Audit Result**
   ![Website Security Audit Result](static/Screenshots/Security_Audit_Tool_Result.png)
+  ![Website Security Audit Result](static/Screenshots/Security_Audit_Tool_Result1.png)
+  ![Website Security Audit Result](static/Screenshots/Security_Audit_Tool_Result2.png)
+
+* **Advanced Subdomain Finder**
+  ![Advanced Subdomain Finder](static/Screenshots/Subdomain_Finder.png)
+
+* **Live Subdomain Finder**
+  ![Live Subdomain Finder](static/Screenshots/Live_Subdomain_Finder.png)
   
 * **PDF Report Example**
-  ![Report](screenshots/report.png)
+  ![Websecurity_Report](screenshots/Websecurity_Report.png)
+  ![Subdomain_Finder_Report](screenshots/Subdomain_Finder_Report.png)
+  
+  
 
 ---
 
