@@ -151,7 +151,7 @@ Visit in browser:
 ## 📂 Project Structure
 
 ```
-.
+Agentless Windows and Network Scanner
 ├── app.py                        # Main Flask application
 ├── modules/                      # Security modules
 │   ├── Network_Scanner.py        # Network scanning (Nmap integration)
