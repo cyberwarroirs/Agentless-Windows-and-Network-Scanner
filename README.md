@@ -182,11 +182,24 @@ Agentless Windows and Network Scanner
 *(Add screenshots for better presentation on GitHub — example placeholders below)*
 
 * **Dashboard**
-  ![Dashboard Screenshot](screenshots/dashboard.png)
+  ![Dashboard](static/Screenshots/Dashboard.png)
+  ![Dashboard](static/Screenshots/Dashboard1.png)
+  
+* **Network Scanner**
+  ![Network Scanner](static/Screenshots/Network_Scanner.png)
 
-* **Network Scan Results**
-  ![Network Scanner](screenshots/network_scan.png)
+* **Local System Vulnerability Scanner**
+  ![Local System Vulnerability Scanner](static/Screenshots/Local_System_Vulnerability_Scanner.png)
 
+* **Local System Vulnerability Scanner Result**
+  ![Local System Vulnerability Scanner Result](static/Screenshots/Local_System_Vulnerability_Scanner_Result.png)
+
+* **Website Security Audit**
+  ![Website Security Audit](static/Screenshots/Security_Audit_Tool.png)
+
+* **Website Security Audit Result**
+  ![Website Security Audit Result](static/Screenshots/Security_Audit_Tool_Result.png)
+  
 * **PDF Report Example**
   ![Report](screenshots/report.png)
 
