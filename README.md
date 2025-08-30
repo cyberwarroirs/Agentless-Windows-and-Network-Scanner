@@ -217,8 +217,8 @@ Contributions are welcome!
 ## 📬 Contact
 
 For queries or collaborations:
-📧 **[your.email@example.com](mailto:your.email@example.com)**
-🌐 [LinkedIn](https://linkedin.com/in/yourprofile) | [GitHub](https://github.com/yourusername)
+📧 **[your.email@example.com](mailto:vijaywagh7391@gmail.com)**
+🌐 [LinkedIn](https://linkedin.com/in/vijaywagh4454) | [GitHub](https://github.com/cyberwarroirs)
 
 ---
 
