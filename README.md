@@ -179,8 +179,6 @@ Agentless Windows and Network Scanner
 
 ## 📸 Screenshots
 
-*(Add screenshots for better presentation on GitHub — example placeholders below)*
-
 * **Dashboard**
   ![Dashboard](static/Screenshots/Dashboard.png)
   ![Dashboard](static/Screenshots/Dashboard1.png)
