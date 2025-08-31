@@ -207,8 +207,9 @@ Agentless Windows and Network Scanner
   ![Live Subdomain Finder](static/Screenshots/Live_Subdomain_Finder.png)
   
 * **PDF Report Example**
-  ![Websecurity_Report](screenshots/Websecurity_Report.png)
-  ![Subdomain_Finder_Report](screenshots/Subdomain_Finder_Report.png)
+  ![Websecurity_Report](static/Screenshots/Websecurity_Report.png)
+  ![Subdomain_Finder_Report](static/Screenshots/Subdomain_Finder_Report.png)
+
   
   
 
