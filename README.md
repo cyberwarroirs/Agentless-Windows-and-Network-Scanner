@@ -180,8 +180,8 @@ Agentless Windows and Network Scanner
 ## 📸 Screenshots
 
 * **Dashboard**
-  ![Dashboard](static/Screenshots/Dashboard.png)
-  ![Dashboard](static/Screenshots/Dashboard1.png)
+  ![Dashboard](Screenshots/Dashboard.png)
+  ![Dashboard](Screenshots/Dashboard1.png)
   
 * **Network Scanner**
   ![Network Scanner](static/Screenshots/Network_Scanner.png)
