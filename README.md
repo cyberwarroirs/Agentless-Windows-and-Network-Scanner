@@ -180,35 +180,35 @@ Agentless Windows and Network Scanner
 ## 📸 Screenshots
 
 * **Dashboard**
-  ![Dashboard](Screenshots/Dashboard.png)
-  ![Dashboard](Screenshots/Dashboard1.png)
+  ![Dashboard](Agentless%20Windows%20&%20Network%20Scanner/static/Screenshots/Dashboard.png)
+  ![Dashboard](Agentless%20Windows%20&%20Network%20Scanner/static/Screenshots/Dashboard1.png)
   
 * **Network Scanner**
-  ![Network Scanner](static/Screenshots/Network_Scanner.png)
+  ![Network Scanner](Agentless%20Windows%20&%20Network%20Scanner/static/Screenshots/Network_Scanner.png)
 
 * **Local System Vulnerability Scanner**
-  ![Local System Vulnerability Scanner](static/Screenshots/Local_System_Vulnerability_Scanner.png)
+  ![Local System Vulnerability Scanner](Agentless%20Windows%20&%20Network%20Scanner/static/Screenshots/Local_System_Vulnerability_Scanner.png)
 
 * **Local System Vulnerability Scanner Result**
-  ![Local System Vulnerability Scanner Result](static/Screenshots/Local_System_Vulnerability_Scanner_Result.png)
+  ![Local System Vulnerability Scanner Result](Agentless%20Windows%20&%20Network%20Scanner/static/Screenshots/Local_System_Vulnerability_Scanner_Result.png)
 
 * **Website Security Audit**
-  ![Website Security Audit](static/Screenshots/Security_Audit_Tool.png)
+  ![Website Security Audit](Agentless%20Windows%20&%20Network%20Scanner/static/Screenshots/Security_Audit_Tool.png)
 
 * **Website Security Audit Result**
-  ![Website Security Audit Result](static/Screenshots/Security_Audit_Tool_Result.png)
-  ![Website Security Audit Result](static/Screenshots/Security_Audit_Tool_Result1.png)
-  ![Website Security Audit Result](static/Screenshots/Security_Audit_Tool_Result2.png)
+  ![Website Security Audit Result](Agentless%20Windows%20&%20Network%20Scanner/static/Screenshots/Security_Audit_Tool_Result.png)
+  ![Website Security Audit Result](Agentless%20Windows%20&%20Network%20Scanner/static/Screenshots/Security_Audit_Tool_Result1.png)
+  ![Website Security Audit Result](Agentless%20Windows%20&%20Network%20Scanner/static/Screenshots/Security_Audit_Tool_Result2.png)
 
 * **Advanced Subdomain Finder**
-  ![Advanced Subdomain Finder](static/Screenshots/Subdomain_Finder.png)
+  ![Advanced Subdomain Finder](Agentless%20Windows%20&%20Network%20Scanner/static/Screenshots/Subdomain_Finder.png)
 
 * **Live Subdomain Finder**
-  ![Live Subdomain Finder](static/Screenshots/Live_Subdomain_Finder.png)
+  ![Live Subdomain Finder](Agentless%20Windows%20&%20Network%20Scanner/static/Screenshots/Live_Subdomain_Finder.png)
   
 * **PDF Report Example**
-  ![Websecurity_Report](static/Screenshots/Websecurity_Report.png)
-  ![Subdomain_Finder_Report](static/Screenshots/Subdomain_Finder_Report.png)
+  ![Websecurity Report](Agentless%20Windows%20&%20Network%20Scanner/static/Screenshots/Websecurity_Report.png)
+  ![Subdomain Finder Report](Agentless%20Windows%20&%20Network%20Scanner/static/Screenshots/Subdomain_Finder_Report.png)
 
   
   
